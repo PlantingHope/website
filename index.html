@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planting Hope - Home</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // If user not logged in, send them to signup (first-page requirement).
+    var logged = localStorage.getItem('loggedInUser');
+    if (!logged) {
+      // ensure sign-up shows first to new users
+      window.location.href = 'signup.html';
+    }
+  </script>
+</head>
+<body>
+  <!-- Main site shown only if logged in -->
+  <section class="header">
+    <nav>
+      <a href="index.html"><img src="images/Planting_Hope_Logo_Small.png" alt="logo"></a>
+      <div class="nav-links" id="navLinks">
+        <i class="fa fa-times" onclick="hideMenu()"></i>
+        <ul>
+          <li><a href="index.html">HOME</a></li>
+          <li><a href="guides.html">GUIDES</a></li>
+          <li><a href="calculator2.html">CALCULATOR</a></li>
+          <li><a href="signup.html">SIGN UP</a></li>
+          <li><a href="login.html">LOGIN</a></li>
+          <li><a href="#" onclick="logout()">LOGOUT</a></li>
+          <li><a href="contact.html">CONTACT</a></li>
+        </ul>
+      </div>
+      <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>
+
+    <div class="text-box">
+      <h1>Planting Hope</h1>
+      <p>Helping farmers grow food and income — practical guides, video tutorials and a planting calculator.</p>
+      <a href="guides.html" class="hero-btn">Start Learning</a>
+      <a href="calculator2.html" class="hero-btn" style="margin-left:10px;">Open Calculator</a>
+    </div>
+  </section>
+
+  <!-- What we offer -->
+  <section class="offer">
+    <h1>What we offer</h1>
+    <div class="row">
+      <div class="offers-col">
+        <h3>Food security</h3>
+        <p>Tools and guides for reliable food production.</p>
+      </div>
+      <div class="offers-col">
+        <h3>Sustainable farming methods</h3>
+        <p>Practical techniques you can use on any scale.</p>
+      </div>
+      <div class="offers-col">
+        <h3>Community Gardens</h3>
+        <p>How to set up and run community plots.</p>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Branches -->
+  <section class="Branches">
+    <h1>Our Branches</h1>
+    <div class="row">
+      <div class="branches-col"><img src="images/Jozi.jpeg" alt="Jozi"><div class="layer"><h3>Johannesburg</h3></div></div>
+      <div class="branches-col"><img src="images/Cape Town.jpeg" alt="Cape Town"><div class="layer"><h3>Cape Town</h3></div></div>
+      <div class="branches-col"><img src="images/Polokwane.jpeg" alt="Polokwane"><div class="layer"><h3>Polokwane</h3></div></div>
+    </div>
+  </section>
+
+  <section class="contact">
+    <h1>Contact Us To Help Us Beat Hunger And Poverty</h1>
+    <a href="contact.html" class="hero-btn">CONTACT US</a>
+    
+  </section>
+
+  <section class="footer">
+    <h4>About Us</h4>
+    <p>Planting Hope is dedicated to fighting hunger through education, sustainable techniques and community action.</p>
+    <div class="icons">
+      <i class="fa-brands fa-facebook"></i>
+      <i class="fa-brands fa-twitter"></i>
+      <i class="fa-brands fa-instagram"></i>
+      <i class="fa-brands fa-linkedin"></i>
+    </div>
+  </section>
+
+  <script>
+    // Toggle menu
+    var navLinks = document.getElementById("navLinks");
+    function showMenu(){ navLinks.style.right = "0"; }
+    function hideMenu(){ navLinks.style.right = "-200px"; }
+
+    function logout() {
+      localStorage.removeItem('loggedInUser');
+      alert('You have been logged out.');
+      window.location.href = 'signup.html';
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</body>
+</html>

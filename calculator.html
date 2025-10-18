@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planting Calculator - Planting Hope</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: linear-gradient(rgba(4,9,30,0.8), rgba(4,9,30,0.8)), url("images/background.jpg");
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    .calc-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      color: #000;
+      border-radius: 8px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .result {
+      margin-top: 15px;
+      padding: 12px;
+      background: #f7f7f7;
+      border-radius: 6px;
+    }
+    .hero-btn {
+      padding: 10px 20px;
+      background-color: #2e8b57;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .hero-btn:hover {
+      background-color: #246b45;
+    }
+  </style>
+</head>
+<body>
+  <nav style="padding:16px;"><a href="index.html">Home</a> | <a href="guides.html">Guides</a> | <a href="signup.html">Sign Up</a> | <a href="login.html">Login</a></nav>
+
+  <section class="calc-container">
+    <h1>Planting Calculator</h1>
+    <p>Estimate seed requirements and expected yield. Choose a preset crop or enter custom values.</p>
+
+    <label for="crop">Preset crop</label>
+    <select id="crop">
+      <option value="">-- choose or enter custom --</option>
+      <option value="tomato">Tomato</option>
+      <option value="maize">Maize</option>
+      <option value="cabbage">Cabbage</option>
+      <option value="spinach">Spinach</option>
+      <option value="potato">Potato</option>
+      <option value="custom">Custom</option>
+    </select>
+
+    <div id="customFields" style="display:none;">
+      <label>Plant spacing (cm) — between plants</label>
+      <input type="number" id="spacing" placeholder="e.g. 45">
+
+      <label>Row spacing (cm)</label>
+      <input type="number" id="rowSpacing" placeholder="e.g. 90">
+
+      <label>Seed rate per 100m² (grams)</label>
+      <input type="number" id="seedRate" placeholder="e.g. 200">
+
+      <label>Expected yield per m² </label>
+      <input type="number" id="yieldPerSqm" placeholder="e.g. 2">
+    </div>
+
+    <label for="area">Area to plant (m²)</label>
+    <input type="number" id="area" placeholder="Enter area in square metres" value="100">
+
+    <button class="hero-btn" id="calcBtn" style="margin-top:12px;">Calculate</button>
+
+    <div id="result" class="result" style="display:none;"></div>
+
+    <hr>
+    <h3>How the calculator works</h3>
+    <ul>
+      <li>If you choose a preset crop, the calculator fills spacing, seed rate and yield defaults.</li>
+      <li>It estimates number of plants, seed required, and expected total yield for your chosen area.</li>
+      <li>You can always select "Custom" to enter your own parameters.</li>
+    </ul>
+  </section>
+
+<script>
+const presets = {
+  tomato: { spacing: 45, rowSpacing: 90, seedRatePer100sqm: 200, yieldPerSqm: 2.5 },
+  maize:  { spacing: 25, rowSpacing: 75, seedRatePer100sqm: 3000, yieldPerSqm: 6 },
+  cabbage:{ spacing: 40, rowSpacing: 60, seedRatePer100sqm: 500, yieldPerSqm: 3 },
+  spinach:{ spacing: 10, rowSpacing: 30, seedRatePer100sqm: 500, yieldPerSqm: 1.2 },
+  potato: { spacing: 30, rowSpacing: 75, seedRatePer100sqm: 12000, yieldPerSqm: 10 }
+};
+
+document.getElementById('crop').addEventListener('change', function() {
+  const val = this.value;
+  const customFields = document.getElementById('customFields');
+  if (!val) {
+    customFields.style.display = 'none';
+    return;
+  }
+  customFields.style.display = 'block';
+  if (val === 'custom') return;
+
+  const p = presets[val];
+  document.getElementById('spacing').value = p.spacing;
+  document.getElementById('rowSpacing').value = p.rowSpacing;
+  document.getElementById('seedRate').value = p.seedRatePer100sqm;
+  document.getElementById('yieldPerSqm').value = p.yieldPerSqm;
+});
+
+document.getElementById('calcBtn').addEventListener('click', function() {
+  const area = parseFloat(document.getElementById('area').value) || 0;
+  if (area <= 0) return alert('Enter a valid area in m².');
+
+  const spacing = parseFloat(document.getElementById('spacing').value);
+  const rowSpacing = parseFloat(document.getElementById('rowSpacing').value);
+  const seedRate = parseFloat(document.getElementById('seedRate').value);
+  const yieldPerSqm = parseFloat(document.getElementById('yieldPerSqm').value);
+
+  let plantsPerSqm = (spacing > 0 && rowSpacing > 0) ? 10000 / (spacing * rowSpacing) : null;
+  let numberOfPlants = plantsPerSqm ? Math.round(plantsPerSqm * area) : 'N/A';
+  let seedNeededGrams = seedRate ? (seedRate * area / 100) : 'N/A';
+  let expectedYieldKg = yieldPerSqm ? (yieldPerSqm * area) : 'N/A';
+
+  const resDiv = document.getElementById('result');
+  resDiv.style.display = 'block';
+  resDiv.innerHTML = `
+    <strong>Results for area: ${area} m²</strong><br>
+    Estimated number of plants: <strong>${numberOfPlants}</strong><br>
+    Estimated seed required: <strong>${typeof seedNeededGrams === 'number' ? seedNeededGrams.toFixed(1) + ' g' : seedNeededGrams}</strong><br>
+    Estimated total yield: <strong>${typeof expectedYieldKg === 'number' ? expectedYieldKg.toFixed(2) + ' m²' : expectedYieldKg}</strong><br>
+    <small>Note: These are estimates. Adjust spacing, seed rate and yield values for your local conditions.</small>
+  `;
+});
+</script>
+</body>
+</html>
